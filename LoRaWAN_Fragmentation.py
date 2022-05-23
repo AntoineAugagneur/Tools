@@ -221,10 +221,10 @@ if __name__ == '__main__':
         print(" -- Number of coded fragment:     " + str(nb_fragment) + " (You've chosen " + str(rd_input) + " but the script gives 100 %" + " of redundancy fragments by default)")
         print(" -- Total number of fragment:     " + str(2*nb_fragment))
         padding = nb_fragment*fs_input - initalsize
-        time_dutycycle = round(nb_fragment/53,1)            # in hours -- 1% max duty cycle in SF9 EU868  => 53 msg/hour
-        time_fairpolicy = round(nb_fragment/44,1)           # in days  -- fair access policy in SF9 EU868 => 44 msg/day
+        time_dutycycle = round(nb_fragment/530,1)            # in hours -- 10% max duty cycle in SF9, 869.525MHz / EU868  => 530 msg/hour
+        time_fairpolicy = round(nb_fragment/44,1)            # in days  -- fair access policy in SF9 EU868 => 44 msg/day (TTN ONLY)
         print(" -- Needed padding:               " + str(padding) + " bytes")
-        print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " hours (with duty-cycle respected, in SF9 EU868 -- 53 msg/hour)")
+        print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " hours (with duty-cycle respected, in SF9 869.525MHz / EU868 -- 530 msg/hour)")
         #print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " days (with fair access policy respected, in SF9 EU868 -- 44 msg/day)")
 
     # get the folder where register the files
