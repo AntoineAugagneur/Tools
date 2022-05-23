@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # File:         Redunduncy fragment generator for Data Fragmented Block Transmission
