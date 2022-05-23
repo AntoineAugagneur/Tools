@@ -225,7 +225,7 @@ if __name__ == '__main__':
         time_fairpolicy = round(nb_fragment/44,1)           # in days  -- fair access policy in SF9 EU868 => 44 msg/day
         print(" -- Needed padding:               " + str(padding) + " bytes")
         print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " hours (with duty-cycle respected, in SF9 EU868 -- 53 msg/hour)")
-        print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " days (with fair access policy respected, in SF9 EU868 -- 44 msg/day)")
+        #print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " days (with fair access policy respected, in SF9 EU868 -- 44 msg/day)")
 
     # get the folder where register the files
     print("")
