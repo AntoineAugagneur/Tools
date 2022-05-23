@@ -29,57 +29,6 @@ from turtle import delay
 #from typing_extensions import Self
 
 
-'''
-# Create an instance of tkinter frame
-win = Tk()
-# Set the geometry of tkinter frame
-win.geometry("700x350")
-
-filepath = ""
-fragsize_input = ""
-redund = ""
-
-def open_file():
-   #file = filedialog.askopenfile(mode='r', filetypes=[('Python Files', '*.py')])
-   file = filedialog.askopenfile(mode='r')
-   if file:
-      filepath = os.path.abspath(file.name)
-      Label(win, text="Choosen file: " + str(filepath), font=('Aerial 11')).place(x=10,y=110)
-
-
-# Labels
-label = Label(win, text="USMB - LoRaWAN Fragmented Data Block Tool", font=('Aerial 14')).place(x=150,y=10)
-label = Label(win, text="(C) Antoine AUGAGNEUR, 2022", font=('Aerial 9')).place(x=250,y=40)
-label = Label(win, text="Choose the file to fragment", font=('Aerial 11')).place(x=10,y=80)
-
-# Buttons
-ttk.Button(win, text="Browse", command=open_file).place(x=205,y=80)
-
-win.mainloop()
-
-
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # =====================================================
 # Global variables
 # =====================================================
