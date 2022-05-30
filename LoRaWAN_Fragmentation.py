@@ -46,7 +46,7 @@ print("USMB - LoRaWAN Fragmented Data Block Tool")
 print("(C) Antoine AUGAGNEUR, 2022 \n")
 print("Steps:")
 print("       1/ Precise the mode you want: [0] Interop (arbitrary data with adjustable fragment settings)")
-print("                                     [1] File    (.sfb file to send via FUOTA proces)")
+print("                                     [1] File    (.sfb file to send via FUOTA process)")
 print("       2/ Give the fragmentation settings")
 print("       3/ Save the generated .sfb and .csv files \n")
 input("Presse ENTER to continue... \n")
@@ -55,23 +55,29 @@ input("Presse ENTER to continue... \n")
 mode_input = int(input("Desired mode (Interop [0] or File [1]):    "))
 
 # Get settings/data depending on mode
-if (mode_input == 0):     
+
+# --> INTEROP MODE
+if (mode_input == 0):        
     test_matlab = True
     test_interop = False
     print("> Interop mode.")
     fs_input = int(input("Set [fragment size] in bytes:              "))
     nf_input = int(input("Set the [number of frag]:                  "))
-    rd_input = int(input("Set [number of redundancy frag] in bytes:  "))
-elif (mode_input == 1):
+    #rd_input = int(input("Set [number of redundancy frag] in bytes:  "))       # commented because not used
+
+# --> FILE MODE
+elif (mode_input == 1):     
     test_matlab = False
     test_interop = False
     print("> File mode.")
-    fs_input = int(input("Set [fragment size] in bytes (max 112):    "))        # 115 bytes in SF9. Fragment command = 3-bytes header + 112-bytes data = 115 bytes
-    rd_input = int(input("Set [number of redundancy frag] in bytes:  "))
+    fs_input = int(input("Set [fragment size] in bytes (max 112):    "))        # 115 bytes in SF9. Fragment command = 3-bytes header + 112-bytes data = 115-bytes data fragment command
+    #rd_input = int(input("Set [number of redundancy frag] in bytes:  "))       # commented because not used
     if fs_input > 112:
-        fs_input = 112
-    # explorer --
+        fs_input = 112      # it cannot be more than 112 (bcause max payload is: 115 bytes = 3-bytes header + 112-bytes data fragment)
+    
+    # File choice
     print("> Chose your file.")
+    tkinter.Tk().withdraw() # prevents an empty tkinter window from appearing
     file = filedialog.askopenfile(mode='r')
     if file:
         filepath = os.path.abspath(file.name)
@@ -81,6 +87,7 @@ elif (mode_input == 1):
         print("Something went wrong")
         exit()
 
+# --> NO MODE
 else:
     print("Wrong input. Try again.")
     exit()
@@ -94,7 +101,7 @@ if test_interop:
 else:
     input_file = filepath           # 'LoRaWAN_End_Node.sfb'
     fragment_size = fs_input        # 112
-    redundancy = rd_input           # 72
+    # redundancy = rd_input           # 72
 
 
 
@@ -217,8 +224,8 @@ if __name__ == '__main__':
         print("> Generated file information:")
         print(" -- Initial file size:            " + str(initalsize) + " bytes")
         print(" -- Fragment size:                " + str(fs_input) + " bytes")
-        print(" -- Number of uncoded fragment:   " + str(nb_fragment))
-        print(" -- Number of coded fragment:     " + str(nb_fragment) + " (You've chosen " + str(rd_input) + " but the script gives 100 %" + " of redundancy fragments by default)")
+        print(" -- Number of uncoded fragment:   " + str(nb_fragment))  
+        print(" -- Number of coded fragment:     " + str(nb_fragment) + " /!\ The script gives 100 %" + " of redundancy fragments by default. However, your FUOTA-Server or your device settings may only allow a tiny percentage.")
         print(" -- Total number of fragment:     " + str(2*nb_fragment))
         padding = nb_fragment*fs_input - initalsize
         time_dutycycle = round(nb_fragment/530,1)            # in hours -- 10% max duty cycle in SF9, 869.525MHz / EU868  => 530 msg/hour
@@ -227,9 +234,10 @@ if __name__ == '__main__':
         print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " hours (with duty-cycle respected, in SF9 869.525MHz / EU868 -- 530 msg/hour)")
         #print(" -- Estimate FUOTA session time:  " + str(time_dutycycle) + " days (with fair access policy respected, in SF9 EU868 -- 44 msg/day)")
 
-    # get the folder where register the files
+    # get the folder path to register the files
     print("")
     if(int(input("Save the file ? (Yes: [1] / No: [0]): ")) == 1):
+        tkinter.Tk().withdraw() # prevents an empty tkinter window from appearing
         path = filedialog.askdirectory()
         if path != "":
             print("Choses folder: " + path)
@@ -241,7 +249,7 @@ if __name__ == '__main__':
         exit()
 
     
-    # SFB --------------------------------------------------------------------------------------------------------
+    # SFB file writting --------------------------------------------------------------------------------------------------------
     print("")
     if test_matlab:
         output_file_sfb = path + "/interop_file.sfb"
@@ -255,9 +263,9 @@ if __name__ == '__main__':
         for num, frag in enumerate(coded_frag, start=1):
             #logger.debug('{:03}: {}'.format(num, frag.upper()))
             f.write(binascii.unhexlify(frag.encode()))
-    print('> Output file: {} | File size: {}'.format(output_file_sfb, os.path.getsize(output_file_sfb)))
-    # ------------------------------------------------------------------------------------------------------------
-    # CSV --------------------------------------------------------------------------------------------------------
+    print('> Output file: {} | File size: {} bytes'.format(output_file_sfb, os.path.getsize(output_file_sfb)))
+    # --------------------------------------------------------------------------------------------------------------------------
+    # CSV file writting --------------------------------------------------------------------------------------------------------
     if test_matlab:
         output_file_csv = path + "/interop_file.csv"
     else:
@@ -283,7 +291,7 @@ if __name__ == '__main__':
     print('> Output file: {} | File size: {} bytes'.format(output_file_csv, os.path.getsize(output_file_csv)))
     # ------------------------------------------------------------------------------------------------------------
 
-
+    # end
     print("")
     input("Presse ENTER to exit...")
     exit()
